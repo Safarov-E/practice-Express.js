@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
 const homeRouters = require('./routes/home');
 const cardRouters = require('./routes/card');
@@ -26,6 +27,15 @@ app.use('/card', cardRouters)
 
 const PORT = process.env.PORT || 3000
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-})
+async function start() {
+    try {
+        const url = 'mongodb+srv://MongoDB:4m6TcI6fug9di9RI@cluster0-9izij.mongodb.net/test?retryWrites=true&w=majority'
+        await mongoose.connect(url, {useNewUrlParser: true})
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        })
+    } catch(e) {
+        console.log(e)
+    }
+}
+start();
